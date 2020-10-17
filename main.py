@@ -26,5 +26,8 @@ async def hello(ctx):
 async def on_ready():
     print("Discord Bot Activated")
 
+# This is testing by Jong
+
+
 
 CLIENT.run(TOKEN)
