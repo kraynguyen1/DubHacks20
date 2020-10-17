@@ -27,7 +27,8 @@ async def on_ready():
     print("Discord Bot Activated")
 
 # This is testing by Jong
+# 12345
 
-
+# this is testing
 
 CLIENT.run(TOKEN)
