@@ -16,10 +16,6 @@ page = requests.get(URL)
 soup = BeautifulSoup(page.content, "html.parser")
 results = soup.find(id="ResultsContainer")
 
-
-
-
-
 # When you type /ping
 # the bot will say "pong!"
 @CLIENT.command()
