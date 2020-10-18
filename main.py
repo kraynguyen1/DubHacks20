@@ -87,8 +87,26 @@ async def info(ctx, arg1):
     pprice = str(results.find('span', {'data-reactid': '98'}).text.strip())
     await ctx.send("Previous Closing Price of " + arg1 + ": $" + pprice)
 
+    oprice = str(results.find('span', {'data-reactid': '103'}).text.strip())
+    await ctx.send("Open Price of " + arg1 + ": $" + oprice)
 
+    # Bid Price of stock
+    if(results.find('span', {'data-reactid': '108'})):
+        bPrice = results.find('span', {'data-reactid': '108'})
+    else:
+        bPrice = results.find('span', {'data-reactid': '108'})
+    if bPrice is not None:
+        bPrice = bPrice.text.strip()
+        await ctx.send("Bid Price of " + arg1 + ": $" + str(bPrice.split(' x ')[0]))
+    else:
+        await ctx.send("Bid Price of " + arg1 + ": $0")
 
+    # Day Range
+    if(results.find('td', {'data-test': 'DAYS_RANGE-value'})):
+        dRStatus = results.find('td', {'data-test': 'DAYS_RANGE-value'})
+    else:
+        dRStatus = results.find('td', {'data-reactid': '117'})
+    await ctx.send("Day Range Status of " + arg1 + ": " + dRStatus.text.strip())
 
 # This method only runs once in the beginning
 @CLIENT.event
