@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.utils import get
 
 
+
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -26,8 +27,12 @@ options.add_argument('headless')
 # initialize the driver
 driver = webdriver.Chrome(chrome_options=options)
 
+
 # Selenium Driver for Chrome
-path = r'chromedriver'
+try:
+    path = r'chromedriver.exe'
+except:
+    path = "/chromedriver"
 
 
 # When you type /ping
