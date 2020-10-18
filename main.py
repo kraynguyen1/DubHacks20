@@ -67,11 +67,6 @@ async def info(ctx, arg1):
     net_price_phrase = "Net price of " + arg1 + ": $" + (price.text.strip().split()[0])
     await ctx.send(net_price_phrase)
 
-    # Get net percent change
-    if(stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($positiveColor)")):
-        price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($positiveColor)")
-    else:
-        price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($negativeColor)")
 
 
 
