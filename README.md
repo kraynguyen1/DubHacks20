@@ -67,6 +67,7 @@ Work-In-Progress
 
 ## Work-In-Progress
 - Finish implement Buy/Sell Paper Trading (Utilize Google Cloud)
+- Finish implement the AI/ML predictor (Utiliez Google Cloud)
 - Allow users to hold multiple company stocks
 - Add visual data to Discord
 - Build web-based app for showcase (Utilize Bubble)
