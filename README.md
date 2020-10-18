@@ -66,9 +66,10 @@ Next, add the bot to any server you own and authorize the server. Enjoy!
 Work-In-Progress
 
 ## Work-In-Progress
-- Finish implement Buy/Sell Paper Trading
+- Finish implement Buy/Sell Paper Trading (Utilize Google Cloud)
 - Allow users to hold multiple company stocks
 - Add visual data to Discord
+- Build web-based app for showcase (Utilize Bubble)
 - Better code organization
 
 ## Team/Contributor
