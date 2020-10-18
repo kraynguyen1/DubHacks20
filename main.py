@@ -72,6 +72,21 @@ async def info(ctx, arg1):
     net_price_phrase = "Net price of " + arg1 + ": $" + (price.text.strip().split()[0])
     await ctx.send(net_price_phrase)
 
+    # Net Percent change in Price
+    price = -1
+    if(stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($positiveColor)")):
+        price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($positiveColor)")
+    else:
+        price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($negativeColor)")
+    percent = float(price.text.strip().split()[1].replace('(', '').replace(')', '').replace('%', ''))
+    net_percent_change = "Net percent change of " + arg1 + ": " + str(percent) + "%"
+    await ctx.send(net_percent_change)
+
+    # Previous Closing Price of stock
+    results = soup.find(id="quote-summary")
+    pprice = str(results.find('span', {'data-reactid': '98'}).text.strip())
+    await ctx.send("Previous Closing Price of " + arg1 + ": $" + pprice)
+
 
 
 
