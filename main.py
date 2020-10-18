@@ -9,6 +9,9 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
+class colors:
+    GREEN = '\033[32m]'
+
 CLIENT = commands.Bot(command_prefix='/')
 TOKEN = 'NzY3MTIzNzY1Mjg3OTc2OTgw.X4tVrg.76zyxJjTYwMAmeVnYLJxzGKGbq0'
 
@@ -79,7 +82,10 @@ async def info(ctx, arg1):
     else:
         price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($negativeColor)")
     percent = float(price.text.strip().split()[1].replace('(', '').replace(')', '').replace('%', ''))
-    net_percent_change = "Net percent change of " + arg1 + ": " + str(percent) + "%"
+    if(net_percent_change) >= 0:
+        net_percent_change = colors.GREEN + "Net percent change of " + arg1 + ": +" + str(percent) + "%"
+    else:
+        net_percent_change = "Net percent change of " + arg1 + ": " + str(percent) + "%"
     await ctx.send(net_percent_change)
 
     # Previous Closing Price of stock
