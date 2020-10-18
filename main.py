@@ -10,15 +10,23 @@ from selenium import webdriver
 CLIENT = commands.Bot(command_prefix='/')
 TOKEN = 'NzY3MTIzNzY1Mjg3OTc2OTgw.X4tVrg.76zyxJjTYwMAmeVnYLJxzGKGbq0'
 
-URL = "https://www.monster.com/jobs/search/?q=Software-Developer\
-        &where=Australia"
-page = requests.get(URL)
-soup = BeautifulSoup(page.content, "html.parser")
-results = soup.find(id="ResultsContainer")
+URL = 'https://finance.yahoo.com/quote/'
 
+# Get options for chrome and make it headless when testing
+# with the console message interupting
+options = webdriver.ChromeOptions()
+prefs = {"profile.managed_default_content_settings.images": 2}
+options.add_experimental_option("prefs", prefs)
+options.add_argument('log-level=3')
+options.add_argument('--ignore-certificate-errors-spki-list')
+options.add_argument('--ignore-ssl-errors')
+options.add_argument('headless')
 
+# initialize the driver
+driver = webdriver.Chrome(chrome_options=options)
 
-
+# Selenium Driver for Chrome
+path = r'chromedriver'
 
 # When you type /ping
 # the bot will say "pong!"
@@ -33,30 +41,21 @@ async def ping(ctx):
 async def hello(ctx):
     await ctx.send("hello!")
 
-# When you type /job
-# the bot will list out jobs
+# When you type /info <stock ticker>
+# the bot will return stock data
 @CLIENT.command()
-async def job(ctx):
-    # Look for Python jobs
-    python_jobs = results.find_all("h2", string=lambda t: "python" in t.lower())
-    for p_job in python_jobs:
-        link = p_job.find("a")["href"]
-        print(p_job.text.strip())
-        print(f"Apply here: {link}\n")
+async def info(ctx, arg1):
+    newURL = URL + arg1 +"?p=" + arg1
 
-    # Print out all available jobs from the scraped webpage
-    job_elems = results.find_all("section", class_="card-content")
+    driver.get(newURL)
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
 
-    for job_elem in job_elems:
-        title_elem = job_elem.find("h2", class_="title")
-        company_elem = job_elem.find("div", class_="company")
-        location_elem = job_elem.find("div", class_="location")
-        if None in (title_elem, company_elem, location_elem):
-            continue
-        await ctx.send(title_elem.text.strip())
-        await ctx.send(company_elem.text.strip())
-        await ctx.send(location_elem.text.strip())
-
+    results = soup.find(id="Lead-3-QuoteHeader-Proxy")
+    stock_elems = results.find("div", class_="D(ib) Mend(20px)")
+    price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)")
+    cur_price_phrase = "Current price of " + arg1 + "is: $" + price.text.strip()
+    await ctx.send(cur_price_phrase)
 
 # This method only runs once in the beginning
 @CLIENT.event
