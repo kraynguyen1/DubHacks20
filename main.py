@@ -2,15 +2,21 @@ import os
 import discord
 from discord.ext import commands
 from discord.utils import get
-
-
-
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import mysql.connector
+
+db = mysql.connector.connect(
+    host="35.224.238.245",
+    user="root",
+    passwd="root",
+    database="data"
+)
+mycursor = db.cursor()
 
 CLIENT = commands.Bot(command_prefix='/')
-TOKEN = 'NzY3MTIzNzY1Mjg3OTc2OTgw.X4tVrg.76zyxJjTYwMAmeVnYLJxzGKGbq0'
+TOKEN = 'NzY3MTIzNzY1Mjg3OTc2OTgw.X4tVrg.FW1gIixwcIcqgKPkHT_-d2TsTL0'
 
 URL = 'https://finance.yahoo.com/quote/'
 
@@ -220,17 +226,82 @@ async def advinfo(ctx, arg1):
     except:
         await ctx.send("Hmmm... Something wrong? :( ")
 
-        
-        
-
 # This method only runs once in the beginning
 @CLIENT.event
 async def on_ready():
     print("Discord Bot Activated")
 
 # This is testing by Jong
-# 12345
+# @CLIENT.command()
+# async def jtesting(ctx):
+#     print(ctx.author.id)
+#     await ctx.send(ctx.author.id)
+#
+@CLIENT.command()
+async def empty(ctx):
+    mycursor.execute("DELETE from User")
 
-# this is testing
+@CLIENT.command()
+async def create(ctx, name, amount):
+    try:
+        newUser(ctx.author.id, name, amount)
+    except:
+        await ctx.send("Your account already exists")
+
+def newUser(id, name, amount):
+    try:
+        # task1 = "INSERT INTO User (userId, name, cash, net) VALUES (%s, %s, %s, %s)"
+        # val1 = (id, name, amount, amount)
+        # mycursor.execute(task1, val1)
+        task2 = "INSERT INTO Wallet (userId) VALUES (%s)"
+        val2 = id
+        mycursor.execute(task2, val2)
+    except:
+        raise Exception
+
+
+def buy(id, code, number, price):
+    try:
+        t1 = "UPDATE Wallet SET amount = amount + %s WHERE userId = %s company = %s"
+        val1 = (number, id, code)
+        mycursor.execute(t1, val1)
+    except:
+        t2 = "INSERT INTO Wallet (userId, company, amount) VALUES (%s, %s, %s)"
+        val2 = (id, code, number)
+        mycursor.execute(t2, val2)
+    t3 = "INSERT INTO History (userId, company, bs, number, price) VALUES (%s, %s, %s, %s, %s)"
+    val3 = (id, code, "B", number, price)
+    mycursor.execute(t3, val3)
+    t4 = "UPDATE User SET cash = cash - %s, net = net + %s WHERE userId = %s"
+    val4 = (price, price, id)
+    db.commit()
+
+def sell(id, code, number, price):
+    try:
+        t1 = "UPDATE Wallet SET amount = amount - %s WHERE userId = %s company = %s"
+        val1 = (number, id, code)
+        mycursor.execute(t1, val1)
+    except:
+        print("Error, not enough money or don't have company")
+    else:
+        t3 = "INSERT INTO History (userId, company, bs, number, price) VALUES (%s, %s, %s, %s, %s)"
+        val3 = (id, code, "S", number, price)
+        mycursor.execute(t3, val3)
+        t4 = "UPDATE User SET cash = cash + %s, net = net - %s WHERE userId = %s"
+        val4 = (price, price, id)
+    db.commit()
+
+def checkWallet(id):
+    t1 = "SELECT * FROM Wallet WHERE userId = %s"
+    mycursor.execute(t1, id)
+    wallet = mycursor.fetchall()
+    for x in wallet:
+        print(x)
+
+def checkbalance(id):
+    t1 = "SELECT cash, net FROM Wallet WHERE userId = %s"
+    mycursor.execute(t1, id)
+    balance = mycursor.fetchone()
+    print(balance)
 
 CLIENT.run(TOKEN)
