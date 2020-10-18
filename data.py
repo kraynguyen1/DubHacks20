@@ -88,10 +88,6 @@ def checkbalance(id):
     print(balance)
 
 
-
-
-
-
 # mycursor.execute("DESCRIBE User")
 # for x in mycursor:
 #     print(x)
