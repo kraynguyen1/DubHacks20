@@ -47,6 +47,17 @@ async def ping(ctx):
     await ctx.send("pong!")
 
 @CLIENT.command()
+async def sendhelp(ctx):
+
+    await ctx.send("```You have to put the company ticker after each command with a space in between!```")
+    await ctx.send("```E.g: /price BABA```")
+    await ctx.send("```/price  -   Current stock price```")
+    await ctx.send("```/nprice  -   Net price: Price difference between the current price and the previous closing period```")
+    await ctx.send("```/npercent  -   Net price in percentage```")
+    await ctx.send("```/info  -   Display basic info of stock```")
+    await ctx.send("```/advinfo  -   Display advanced info of stock```")
+
+@CLIENT.command()
 async def price(ctx, arg1):
     try:
         await ctx.send("Loading stock data...")
@@ -60,7 +71,7 @@ async def price(ctx, arg1):
         results = soup.find(id="Lead-3-QuoteHeader-Proxy")
         stock_elems = results.find("div", class_="D(ib) Mend(20px)")
         price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)")
-        cur_price_phrase = "Current price of " + arg1 + ": $" + price.text.strip()
+        cur_price_phrase = "Current price: $" + price.text.strip() 
         await ctx.send(cur_price_phrase)
     except:
         await ctx.send("Hmmm... Something wrong? :( ")
@@ -84,7 +95,7 @@ async def nprice(ctx, arg1):
             price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($positiveColor)")
         else:
             price = stock_elems.find("span", class_="Trsdu(0.3s) Fw(500) Pstart(10px) Fz(24px) C($negativeColor)")
-        net_price_phrase = "Net price of " + arg1 + ": $" + (price.text.strip().split()[0])
+        net_price_phrase = "Net price: $" + (price.text.strip().split()[0])
         await ctx.send(net_price_phrase)
     except:
         await ctx.send("Hmmm... Something wrong? :( ")
