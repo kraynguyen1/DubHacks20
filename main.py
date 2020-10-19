@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 
 CLIENT = commands.Bot(command_prefix='/')
-TOKEN = 'NzY3MTIzNzY1Mjg3OTc2OTgw.X4tVrg.FW1gIixwcIcqgKPkHT_-d2TsTL0'
+TOKEN = 'NzY3MTIzNzY1Mjg3OTc2OTgw.X4tVrg.sGqgDpX_Q3rbX6jXYs5C1CirCd8'
 
 URL = 'https://finance.yahoo.com/quote/'
 
@@ -50,6 +50,27 @@ async def sendhelp(ctx):
     await ctx.send("```/npercent  -   Net price in percentage```")
     await ctx.send("```/info  -   Display basic info of stock```")
     await ctx.send("```/advinfo  -   Display advanced info of stock```")
+sadsd
+# Earning per share
+@CLIENT.command()
+async def eps(ctx, arg1):
+    try:
+        await ctx.send("Loading stock data...")
+        newURL = URL + arg1 +"?p=" + arg1
+
+        driver.get(newURL)
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        results = soup.find(id="quote-summary")
+        if(results.find('td', {'data-test': 'EPS_RATIO-value'})):
+            eps = results.find('td', {'data-test': 'EPS_RATIO-value'})
+        else:
+            eps = results.find('td', {'data-reactid': '153'})
+        await ctx.send("Earnings per share " + eps.text.strip())
+        await ctx.send("-------------------------")
+    except:
+        await ctx.send("Hmmm... Something wrong? :( ")
 
 @CLIENT.command()
 async def price(ctx, arg1):
