@@ -4,7 +4,7 @@ db = mysql.connector.connect(
     host="35.224.238.245",
     user="root",
     passwd="root",
-    database="database"
+    database="data"
 )
 
 mycursor = db.cursor()
@@ -15,32 +15,31 @@ mycursor = db.cursor()
 
 # Creating User Table
 # mycursor.execute("CREATE TABLE User("
-#                  "userId int PRIMARY KEY AUTO_INCREMENT,"
+#                  "userId int,"
 #                  "name VARCHAR(50),"
 #                  "cash int DEFAULT 0,"
 #                  "net int DEFAULT 0)")
 
 # Creating Wallet Table
 # mycursor.execute("CREATE TABLE Wallet("
-#                  "userId int PRIMARY KEY, FOREIGN KEY(userId) REFERENCES User(userId),"
+#                  "userId int,"
 #                  "company VARCHAR(50),"
 #                  "amount int UNSIGNED)")
 
 # Creating History Table
 # mycursor.execute("CREATE TABLE History("
-#                  "userId int PRIMARY KEY, FOREIGN KEY(userId) REFERENCES User(userId),"
+#                  "userId int,"
 #                  "company VARCHAR(50),"
 #                  "bs ENUM('B', 'S') NOT NULL,"
 #                  "number int DEFAULT 0,"
 #                  "price int DEFAULT 0)")
 
-def newUser(name, amount):
-    task1 = "INSERT INTO User (name, cash, net) VALUES (%s, %s, %s)"
-    val1 = (name, amount, amount)
+def newUser(id, name, amount):
+    task1 = "INSERT INTO User (userId, name, cash, net) VALUES (%s, %s, %s, %s)"
+    val1 = (id, name, amount, amount)
     mycursor.execute(task1, val1)
-    last_id = mycursor.lastrowid
     task2 = "INSERT INTO Wallet (userId) VALUES (%s)"
-    val2 = last_id
+    val2 = id
     mycursor.execute(task2, val2)
 
 def buy(id, code, number, price):
