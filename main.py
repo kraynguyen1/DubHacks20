@@ -56,7 +56,7 @@ async def sendhelp(ctx):
     await ctx.send("```/npercent  -   Net price in percentage```")
     await ctx.send("```/info  -   Display basic info of stock```")
     await ctx.send("```/advinfo  -   Display advanced info of stock```")
-sadsd
+    
 # Earning per share
 @CLIENT.command()
 async def eps(ctx, arg1):
